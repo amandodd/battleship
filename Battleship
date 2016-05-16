@@ -1,0 +1,897 @@
+package battleShip;
+
+//Name: Aman Dodd
+//Date: May 1st 2013
+//Project: Battleship Game.
+
+import java.util.Scanner;
+import java.awt.BorderLayout; 
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.net.URL;
+import java.util.Scanner;
+import javax.swing.AbstractButton;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+
+public class BattleShip implements ActionListener {
+	
+    JFrame frame = null; //null refers to empty object
+    JButton button = null; //null refers to empty object
+	
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		//Initialise GUI:
+		BattleShip mcc = new BattleShip();
+        JFrame.setDefaultLookAndFeelDecorated(true);
+        
+        //Declare/ Initialise mcc (GUI organiser) and declare JComponents (button and JFrame):
+        mcc.frame = new JFrame("BattleShip - International");
+        mcc.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //Exit operation.
+        //Initialise 'Play' button:
+        mcc.button = new JButton("Play");
+        mcc.button.setDefaultCapable(true); //Determine whether this button is default.
+        //Position of play button:
+        mcc.button.setVerticalTextPosition(AbstractButton.CENTER);
+        mcc.button.setHorizontalTextPosition(AbstractButton.CENTER);
+        //Determine command:
+        mcc.button.setActionCommand("play");
+        mcc.button.addActionListener(mcc);
+        //Position:
+        mcc.frame.getContentPane().add(mcc.button, BorderLayout.CENTER);
+       
+        
+        JLabel l1 = new JLabel();
+        l1.setText(null);
+        try {
+        //Background Image:
+        l1.setIcon(new ImageIcon(createImageIcon("Battleship.jpg").getImage().getScaledInstance(800, 433, Image.SCALE_SMOOTH)));
+        } catch (NullPointerException t) {
+        }
+        //Text Position:
+        l1.setVerticalTextPosition(JLabel.CENTER);
+        l1.setHorizontalTextPosition(JLabel.CENTER);
+        	mcc.frame.getContentPane().add(l1, BorderLayout.NORTH);
+        	mcc.frame.setResizable(false);
+        	mcc.frame.pack();
+        	//Sets the location of the window:
+            mcc.frame.setLocationRelativeTo(null);
+        	mcc.frame.setVisible(true);
+    	}
+	
+        //Error checking:
+        protected static ImageIcon createImageIcon(String path) {
+        URL imgURL = BattleShip.class.getResource(path);
+        if (imgURL != null) {
+            return new ImageIcon(imgURL);
+        } else {
+            System.err.println("Couldn't find file: " + path);
+            return null;
+        	}
+        }
+        
+        //Play action (play game):
+        public void actionPerformed(ActionEvent t) {
+        	//If Play button is not pressed, then it is instructions button (show instructions):
+           if (!t.getActionCommand().equals("play")) {
+        	   return; //Go back to game.
+        }
+        frame.setVisible(false);
+        button.setEnabled(false);
+		
+		//Variable Declaration for whole code~
+		String contUser;
+		String Code, Code1, Code2, Code3, Code4;
+		int userCountry, cpuCountry, firstString=0, secondString=0;
+		int a, b, c, d, e, f, g, h, inCounter = 0, inCounter2 = 0, inCounter3 = 0, inCounter4 = 0, inCounter5 = 0, inCounter6=0;
+		String country1 = null, country2 = null;
+		
+		//Randomizing country for a specified continent
+		userCountry = (int)(Math.random()*3+1);
+		cpuCountry = (int)(Math.random()*3+1);
+		
+		//Creating two game boards for user and two game boards for computer also setting the symbols of the board.
+		int gameUserBoard [][] = new int [8][8];
+		int gameUser2Board[][]= new int [8][8];
+		int gameComputerBoard [][]= new int [8][8];
+		int gameComputer2Board [][]= new int [8][8];
+		
+		for (int row = 0; row<8; row++){
+			for (int col = 0; col<8;col++){
+				gameUserBoard [row][col]=0;
+				gameUser2Board [row][col]=0;
+				gameComputerBoard [row][col]=0;
+				gameComputer2Board [row][col]=0;
+			}
+		}
+		
+		//Introduction to BattleShip Game
+		Scanner input = new Scanner(System.in);
+		System.out.println("\t\t\tWelcome to BatttleShip World War Edition!");
+		System.out.println("\tInstructions: You will be given the opportunity to place 5 different boats. ");
+		System.out.println("Furthermore, to make this game more challenging, the 5 boats given have only a specific direction they can be placed in.");
+		System.out.println("To do this, you must enter a coordinate, eg. A5, and this coordinate must be between A-H AND 0-7(yes 0 is a coordinate).");
+		System.out.println("You will be facing off against a computer, and its boats will be placed randomly.");
+		System.out.println("Then, you will attempt to attack the computers boats locations, and the game will finish once you or the computer has sunk all of the opponents boats!");
+		System.out.println("");
+		
+		//----------------------------------------------------------//COUNTRY SELECTION//---------------------------------------------------------------------------------------------//
+		
+		//User given option to enter continent of where he wishes to fight.(North America, Asia etc.)
+		System.out.println("Please type in the continent of where you wish to fight:");
+		//Using counter to determine if incorrect word is entered, and given opportunity to retry
+		int counter=0;
+		while (counter<1){
+			contUser = input.nextLine();
+			counter++;
+			
+			//Continent consisting of North America
+		if (contUser.equalsIgnoreCase("North America")){
+			
+			if (userCountry==1){
+				country1 = "Canada";
+				System.out.println("The country you will be playing for is: " + country1);
+				
+			}
+			else if (userCountry==2){
+				country1 = "United States";
+				System.out.println("The country you will be playing for is: " + country1);
+				counter++;
+			}
+			else if (userCountry==3){
+				country1 = "Mexico";
+				System.out.println("The country you will be playing for is: " + country1);
+				
+			}
+			if (cpuCountry==1){
+				country2 = "Cuba";
+				System.out.println("The country you will facing is: " + country2);
+				
+			}
+			else if (cpuCountry==2){
+				country2 = "Haiti";
+				System.out.println("The country you will facing is: " + country2);
+				
+			}
+			else if (cpuCountry==3){
+				country2 = "Honduras";
+				System.out.println("The country you will facing is: " + country2);
+				
+			}
+			
+			
+		}
+		//Continent consisting of South America
+		else if (contUser.equalsIgnoreCase("South America")){
+			counter++;
+			if (userCountry==1){
+				country1 = "Brazil";
+				System.out.println("The country you will be playing for is: " + country1);
+				
+			}
+			else if (userCountry==2){
+				country1 = "Argentina";
+				System.out.println("The country you will be playing for is: " + country1);
+				
+			}
+			else if (userCountry==3){
+				country1 = "Guyana";
+				System.out.println("The country you will be playing for is: " + country1);
+				
+			}
+			if (cpuCountry==1){
+				country2 = "Colombia";
+				System.out.println("The country you will facing is: " + country2);
+				
+			}
+			else if (cpuCountry==2){
+				country2 = "Peru";
+				System.out.println("The country you will facing is: " + country2);
+				
+			}
+			else if (cpuCountry==3){
+				country2 = "Venezuela";
+				System.out.println("The country you will facing is: " + country2);
+				
+			}
+		}
+		//Continent consisting of Europe
+		else if (contUser.equalsIgnoreCase("Europe")){
+			counter++;
+			if (userCountry==1){
+				country1 = "France";
+				System.out.println("The country you will be playing for is: " + country1);
+				
+			}
+			else if (userCountry==2){
+				country1 = "Spain";
+				System.out.println("The country you will be playing for is: " + country1);
+				
+			}
+			else if (userCountry==3){
+				country1 = "Ukraine";
+				System.out.println("The country you will be playing for is: " + country1);
+				
+			}
+			if (cpuCountry==1){
+				country2 = "Italy";
+				System.out.println("The country you will facing is: " + country2);
+			
+			}
+			else if (cpuCountry==2){
+				country2 = "Portugal";
+				System.out.println("The country you will facing is: " + country2);
+				
+			}
+			else if (cpuCountry==3){
+				country2 = "Hungary";
+				System.out.println("The country you will facing is: " + country2);
+				
+			}
+		}
+		//Continent consisting of Asia
+		else if (contUser.equalsIgnoreCase("Asia")){
+			counter++;
+			if (userCountry==1){
+				country1 = "Pakistan";
+				System.out.println("The country you will be playing for is: " + country1);
+				
+			}
+			else if (userCountry==2){
+				country1 = "India";
+				System.out.println("The country you will be playing for is: " + country1);
+				
+			}
+			else if (userCountry==3){
+				country1 = "China";
+				System.out.println("The country you will be playing for is: " + country1);
+				
+			}
+			if (cpuCountry==1){
+				country2 = "Japan";
+				System.out.println("The country you will facing is: " + country2);
+				
+			}
+			else if (cpuCountry==2){
+				country2 = "Bangladesh";
+				System.out.println("The country you will facing is: " + country2);
+				
+			}
+			else if (cpuCountry==3){
+				country2 = "Singapore";
+				System.out.println("The country you will facing is: " + country2);
+				
+			}
+		}
+		//Continent consisting of Africa
+		else if (contUser.equalsIgnoreCase("Africa")){
+			counter++;
+			counter++;
+			if (userCountry==1){
+				country1 = "Nigeria";
+				System.out.println("The country you will be playing for is: " + country1);
+				
+			}
+			else if (userCountry==2){
+				country1 = "Ethiopia";
+				System.out.println("The country you will be playing for is: " + country1);
+				
+			}
+			else if (userCountry==3){
+				country1 = "Egypt";
+				System.out.println("The country you will be playing for is: " + country1);
+			}
+			if (cpuCountry==1){
+				country2 = "Kenya";
+				System.out.println("The country you will facing is: " + country2);
+			}
+			else if (cpuCountry==2){
+				country2 = "Ghana";
+				System.out.println("The country you will facing is: " + country2);
+			}
+			else if (cpuCountry==3){
+				country2 = "Liberia";
+				System.out.println("The country you will facing is: " + country2);
+			}
+		}
+		//Continent consisting of Oceania
+		else if (contUser.equalsIgnoreCase("Oceania")){
+			counter++;
+			if (userCountry==1){
+				country1 = "Australia";
+				System.out.println("The country you will be playing for is: " + country1);
+			}
+			else if (userCountry==2){
+				country1 = "New Zealand";
+				System.out.println("The country you will be playing for is: " + country1);
+			}
+			else if (userCountry==3){
+				country1 = "Fiji";
+				System.out.println("The country you will be playing for is: " + country1);
+			}
+			if (cpuCountry==1){
+				country2 = "Tonga";
+				System.out.println("The country you will facing is: " + country2);
+			}
+			else if (cpuCountry==2){
+				country2 = "Palau";
+				System.out.println("The country you will facing is: " + country2);
+			}
+			else if (cpuCountry==3){
+				country2 = "Samoa";
+				System.out.println("The country you will facing is: " + country2);
+			}
+		}
+		//Using else statement if incorrect term is entered.
+		else {
+			counter--;
+			System.out.println("Please refrain from using the continent 'Antarctica', and spell eligibily.");
+		}
+		}
+		
+		//Welcoming Statements
+		System.out.println("------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
+		try {
+		    Thread.sleep(500);
+		} catch(InterruptedException ex) {
+		    Thread.currentThread().interrupt();
+		}
+		System.out.println("Welcome, " + country1 + " You are now on the battlefield.");
+		try {
+		    Thread.sleep(500);
+		} catch(InterruptedException ex) {
+		    Thread.currentThread().interrupt();
+		}
+		System.out.println("Objection: To sink all of " + country2 + "'s ships.");
+		System.out.println("");
+		
+		
+		//----------------------------------------------------------//USER BOAT PLACEMENT//---------------------------------------------------------------------------------------------//
+		//User placing his/her boats on battlefield
+		
+		try {
+		    Thread.sleep(1000);
+		} catch(InterruptedException ex) {
+		    Thread.currentThread().interrupt();
+		}
+		System.out.println("Enter the coordinate of where you wish to place your boat (1 space):");
+		while (inCounter<1){
+		String code = input.nextLine();
+		inCounter++;
+		firstString = Transition(code);
+		secondString = Transition2(code);
+		if (firstString !=9 && secondString <=7 && checkArray(gameUserBoard, firstString, 1, secondString, 1)){
+
+		printArray(gameUserBoard,firstString,firstString+1,secondString,secondString+1,1);
+		outputArray(gameUserBoard);}
+		else {
+			System.out.println("Those are invalid coordinates. Please re-enter coordinates within the range of A-H AND 0-7.");
+			inCounter--;
+		}
+		}
+		
+		//User placing his/her boats on battlefield
+		System.out.println("Enter the coordinate of where you wish to place your Destroyer (2 space Horizontal  Ship):");
+		while (inCounter2<1){
+		Code1 = input.nextLine();
+		inCounter2++;
+		a = Transition(Code1);
+		b = Transition2 (Code1);
+		if (b!=7){
+		if (a !=9 && b <=7 && checkArray(gameUserBoard, a, 1, b, 2)){
+		printArray(gameUserBoard,a,a+1,b,b+2,2);
+		outputArray(gameUserBoard);}
+		else {
+			System.out.println("Those are invalid coordinates. Please re-enter coordinates within the range of A-H AND 0-7 or your ship may be interfering with another ship.");
+			inCounter2--;
+		}}
+		else {
+			System.out.println("Remember, this ship can only go rightwards, please re-enter coordinates that will allow the ship to fit.");
+			inCounter2--;}
+		
+		}
+		
+		
+		//User placing his/her boats on battlefield
+		System.out.println("Enter the coordinate of where you wish to place your Submarine (3 space Vertical  Ship) ");
+		while (inCounter3<1){
+		Code2 = input.nextLine();
+		inCounter3++;
+		c = Transition(Code2);
+		d = Transition2 (Code2);
+		if (c!=6&&c!=7){
+		if (c !=9 && d <=7 && checkArray(gameUserBoard, c, 3, d, 1)){
+		printArray(gameUserBoard, c, c+3, d, d+1, 3);
+		outputArray(gameUserBoard);}
+		else {
+			System.out.println("Those are invalid coordinates. Please re-enter coordinates within the range of A-H AND 0-7.");
+			inCounter3--;
+		}
+		}
+		else {
+			System.out.println("Remember, this ship can only go downwards, please re-enter coordinates that will allow the ship to fit.");
+			inCounter3--;}
+		}
+		
+		//User placing his/her boats on battlefield
+		System.out.println("Enter the coordinate of where you wish to place your BattleShip (4 space Horizontal  ship) ");
+		while (inCounter4<1){
+		Code3 = input.nextLine();
+		inCounter4++;
+		e = Transition(Code3);
+		f = Transition2 (Code3);
+		if (f!=5&&f!=6&&f!=7){
+		if (e !=9 && f <=7 && checkArray(gameUserBoard, e, 1, f, 4)){
+		printArray(gameUserBoard, e, e+1, f, f+4, 4);
+		outputArray(gameUserBoard);}
+		else {
+			System.out.println("Those are invalid coordinates. Please re-enter coordinates within the range of A-H AND 0-7.");
+			inCounter4--;
+		}
+		}
+		else {
+			System.out.println("Remember, this ship can only go rightwards, please re-enter coordinates that will allow the ship to fit.");
+			inCounter4--;}
+		}
+		
+		
+		//User placing his/her boats on battlefield
+		System.out.println("Enter the coordinate of where you wish to place your Carrier (5 space Vertical ship) ");
+		while (inCounter5<1){
+		Code4 = input.nextLine();
+		inCounter5++;
+		g = Transition(Code4);
+		h = Transition2 (Code4);
+		if (g!=4 && g!=5 && g!=6 && g!=7){
+		if (g !=9 && h <=7 && checkArray(gameUserBoard, g, 5, h, 1)){
+		printArray(gameUserBoard, g, g+5, h, h+1, 5);
+		outputArray(gameUserBoard);}
+		else {
+			System.out.println("Those are invalid coordinates. Please re-enter coordinates within the range of A-H AND 0-7.");
+			inCounter5--;
+		}}
+		else {
+			System.out.println("Remember, this ship can only go downwards, please re-enter coordinates that will allow the ship to fit.");
+			inCounter5--;
+		}
+		}
+		
+		//----------------------------------------------------------//COMPUTER BOAT PLACEMENT//---------------------------------------------------------------------------------------------//
+		//Variable Declaration
+		int x1,y1,x2,y2,x3,y3,x4,y4,x5,y5;
+		//Counters for each random boat placement
+		inCounter=0;
+		inCounter2=0;
+		inCounter3=0;
+		inCounter4=0;
+		inCounter5=0;
+		//Placing first boat for computer.
+		while (inCounter<1){
+			inCounter++;
+			x1 = (int)(Math.random()*8);
+			y1 = (int)(Math.random()*8);
+			if (x1 !=9 && y1 <=7 && checkArray(gameComputerBoard, x1, 1, y1, 1)){
+
+			printArray(gameComputerBoard,x1,x1+1,y1,y1+1,1);
+			}
+			else {
+				inCounter--;
+			}
+			}
+		//Placing second boat for computer.
+		while (inCounter2<1){
+			inCounter2++;
+			x2 = (int)(Math.random()*8);
+			y2 = (int)(Math.random()*8);
+			if (y2!=7){
+			if (x2 !=9 && y2 <=7 && checkArray(gameComputerBoard, x2, 1, y2, 2)){
+			printArray(gameComputerBoard,x2,x2+1,y2,y2+2,2);
+			}
+			else {
+				
+				inCounter2--;
+			}}
+			else {
+				
+				inCounter2--;}
+			
+			}
+		//Placing third boat for computer.
+		while (inCounter3<1){
+			inCounter3++;
+			x3 = (int)(Math.random()*8);
+			y3 = (int)(Math.random()*8);
+			if (x3!=6&&x3!=7){
+			if (x3 !=9 && y3 <=7 && checkArray(gameComputerBoard, x3, 3, y3, 1)){
+			printArray(gameComputerBoard, x3, x3+3, y3, y3+1, 3);
+			}
+			else {
+				
+				inCounter3--;
+			}
+			}
+			else {
+				inCounter3--;}
+			}
+		//Placing fourth boat for computer.
+		while (inCounter4<1){
+			inCounter4++;
+			x4 = (int)(Math.random()*8);
+			y4 = (int)(Math.random()*8);
+			if (y4!=5&&y4!=6&&y4!=7){
+			if (x4 !=9 && y4 <=7 && checkArray(gameComputerBoard, x4, 1, y4, 4)){
+			printArray(gameComputerBoard, x4, x4+1, y4, y4+4, 4);
+			}
+			else {
+				
+				inCounter4--;
+			}
+			}
+			else {
+				
+				inCounter4--;}
+			}
+		//Placing 5th boat for computer.
+		while (inCounter5<1){
+			inCounter5++;
+			x5 = (int)(Math.random()*8);
+			y5 = (int)(Math.random()*8);
+			if (x5!=4 && x5!=5 && x5!=6 && x5!=7){
+			if (x5 !=9 && y5 <=7 && checkArray(gameComputerBoard, x5, 5, y5, 1)){
+			printArray(gameComputerBoard, x5, x5+5, y5, y5+1, 5);
+			
+		}
+			else {
+				inCounter5--;
+			}}
+			else {
+				
+				inCounter5--;
+			}
+			}
+		
+		
+		//Output after boats have been placed.
+		System.out.println("Thank you, your boats have been placed on the battlefield. ");
+		//Count down to give placement effect
+		try {
+		    Thread.sleep(450);
+		} catch(InterruptedException ex) {
+		    Thread.currentThread().interrupt();
+		}
+		System.out.print("5,");
+		//Count down to give placement effect
+		try {
+		    Thread.sleep(450);
+		} catch(InterruptedException ex) {
+		    Thread.currentThread().interrupt();
+		}
+		System.out.print("4,");
+		//Count down to give placement effect
+		try {
+		    Thread.sleep(450);
+		} catch(InterruptedException ex) {
+		    Thread.currentThread().interrupt();
+		}
+		System.out.print("3,");
+		//Count down to give placement effect
+		try {
+		    Thread.sleep(450);
+		} catch(InterruptedException ex) {
+		    Thread.currentThread().interrupt();
+		}
+		System.out.print("2,");
+		//Count down to give placement effect
+		try {
+		    Thread.sleep(450);
+		} catch(InterruptedException ex) {
+		    Thread.currentThread().interrupt();
+		}
+		System.out.print("1!");
+		//Count down to give placement effect
+		try {
+		    Thread.sleep(450);
+		} catch(InterruptedException ex) {
+		    Thread.currentThread().interrupt();
+		}
+		
+		//------------------------------------------------------------//ATTACKING PORTION//--------------------------------------------------------------------------------//
+		//Brief Introduction
+		System.out.println("");
+		System.out.println("The computer's boats have been randomly placed on there battlefield. Lets Get Started!");
+		System.out.println("You and your opponent (computer) will take turns attacking each other, by plotting coordinates.");
+		System.out.println("The first one to sink off all of the others ships shall be victorious!");
+		System.out.println("\tTHE TRACKER:");
+		//Output second array of user
+		outputArray(gameUser2Board);
+		System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+		System.out.println("\tTHE HQ:");
+		//Ouptput first array of user
+		outputArray(gameUserBoard);
+		System.out.println("");
+		System.out.println("The top part is called THE TRACKER, and in this part you can keep track of where you have attacked.");
+		System.out.println("If you do not hit anything, a *9* will be placed, or if you do hit something the portion of the ship will appear.");
+		System.out.println("Below is THE HQ where you can keep track of where the computer has attacked. If he does infact hit something, it will become 0.");
+		System.out.println("");
+		
+		String userCode;
+		int userShips=5, compShips=5, round=0;
+		int x,y;
+	
+		//While loop to continue until either one of the users or computers ships are done.
+		while (userShips!=0 && compShips!=0){
+			   int cntr=0,cntr2=0,cntr3=0,cntr4=0,cntr5=0,hit=0,hit2=0,cntr6=0,cntr7=0,cntr8=0,cntr9=0,cntr10=0;
+			   round++;
+			   System.out.println("Round: " + round);
+			   System.out.println("User Ships: " + userShips);
+			   System.out.println("Computer Ships: " + compShips);
+			   System.out.println("USER TURN:");
+			   System.out.println("Please enter coordinate to attack: ");
+			   userCode = input.nextLine();
+			   //Obtaining coordinates that user wants attacked on the opponent.
+			   x = Transition(userCode);
+			   y = Transition2 (userCode);
+			   int xx = (int)(Math.random()*8);
+			   int yy = (int) (Math.random()*8);
+			   String letter = Transition3(xx);
+			   if(x!=9 && y<=7) {
+			    if (gameComputerBoard[x][y]!=0){
+			     gameUser2Board[x][y]=gameComputerBoard[x][y];
+			     hit = gameComputerBoard[x][y];
+			     gameComputerBoard[x][y]=0;
+			     System.out.println("You hit a ship!");
+			    }
+			    else {
+			     System.out.println("You did not hit anything.");
+			     gameUser2Board[x][y]=9;
+			    }
+			   }
+			   else {
+			    System.out.println("PENALTY: Inavid Coordinate (you lost you're turn)");
+			   }
+			   System.out.println("COMPUTER TURN:");
+			   //Checking if coordinates that are randomized for computer are a hit 
+			   if (gameUserBoard[xx][yy]!=0){
+				   gameComputer2Board[xx][yy]=gameUserBoard[xx][yy];
+				   hit2 = gameUserBoard[xx][yy];
+				   gameUserBoard[xx][yy]=0;
+				   System.out.println("The computer hit something at " + letter + "," + yy);
+			   }
+			   else {
+				   System.out.println("The computer attacked at " + letter + "," + yy + " but did not hit anything.");
+				   gameComputer2Board[xx][yy]=9;
+			   }
+			   
+			   
+			   System.out.println("\tTHE TRACKER:");
+			   outputArray(gameUser2Board);
+			   System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+			   System.out.println("\tTHE HQ:");
+			   outputArray(gameUserBoard);
+			   System.out.println("");
+			   
+			//Counter/Hit method to reduce ship number.
+			if (hit > 0) {
+			 for (int row =0; row<8;row++){
+			  for (int col=0;col<8;col++){
+			     if (gameComputerBoard[row][col]==5){
+			      cntr++;
+			     }
+			     else if (gameComputerBoard[row][col]==4){
+			      cntr2++;
+			     }
+			     else if(gameComputerBoard[row][col]==3){
+			      cntr3++;
+			     }
+			     else if(gameComputerBoard[row][col]==2){
+			      cntr4++;
+			     }
+			     else if(gameComputerBoard[row][col]==1){
+			      cntr5++;
+			     }
+			   }
+			  }
+			  //Reduce ship number
+			   if (cntr==0 && hit == 5){
+			    compShips--;
+			    
+			   }
+			   if (cntr2==0 && hit == 4){
+			    compShips--;
+			   }
+			   if (cntr3==0 && hit == 3){
+			    compShips--;
+			   }
+			   if (cntr4==0 && hit == 2){
+			    compShips--;
+			   }
+			   if (cntr5==0 && hit == 1){
+			    compShips--;
+			   }
+			}
+			//Counter/Hit method to reduce ship number.
+			if (hit2 > 0) {
+				 for (int row =0; row<8;row++){
+				  for (int col=0;col<8;col++){
+				     if (gameUserBoard[row][col]==5){
+				      cntr6++;
+				     }
+				     else if (gameUserBoard[row][col]==4){
+				      cntr7++;
+				     }
+				     else if(gameUserBoard[row][col]==3){
+				      cntr8++;
+				     }
+				     else if(gameUserBoard[row][col]==2){
+				      cntr9++;
+				     }
+				     else if(gameUserBoard[row][col]==1){
+				      cntr10++;
+				     }
+				   }
+				  }
+				 //Reduce ship number.
+				   if (cntr6==0 && hit2 == 5){
+				    userShips--;
+				    
+				   }
+				   if (cntr7==0 && hit2 == 4){
+				    userShips--;
+				   }
+				   if (cntr8==0 && hit2 == 3){
+				    userShips--;
+				   }
+				   if (cntr9==0 && hit2 == 2){
+				    userShips--;
+				   }
+				   if (cntr10==0 && hit2 == 1){
+				    userShips--;
+				   }
+				}
+			   
+			}
+		//Determining the winner of the game
+		if (userShips==0 && compShips!=0){
+			System.out.println("You " + userCountry + ", have outlasted the opponent, and have come forth victorious. The amount of rounds it took you are: " + round);
+		}
+		//Determining the winner of the game
+		else if (userShips!=0 && compShips==0){
+			System.out.println("The " + cpuCountry + " have come victorious, and have beaten you. The amount of rounds it took them to win are: " + round);
+		}
+		//Determining the winner of the game
+		else if (userShips==0 && compShips==0){
+			System.out.println("SPECTACULAR, Today we have witnessed a tie! This occured on round number: " + round);
+		}
+			   
+			  }
+	//Method that returns value of letter
+	//PRE: One string parameter
+	//POST: Returns one integer value
+	public static int Transition(String a){
+		String rows;
+		int k = 0;
+		rows = a.substring(0,1);
+		if (rows.equalsIgnoreCase("A")){
+			k =0;}
+		else if (rows.equalsIgnoreCase("B")){
+			k=1;}
+		else if (rows.equalsIgnoreCase("C")){
+			k=2;}
+		else if (rows.equalsIgnoreCase("D")){
+			k=3;}
+		else if (rows.equalsIgnoreCase("E")){
+			k=4;}
+		else if (rows.equalsIgnoreCase("F")){
+			k=5;}
+		else if (rows.equalsIgnoreCase("G")){
+			k=6;}
+		else if (rows.equalsIgnoreCase("H")){
+			k=7;}
+		else
+			k=9;
+		return k;
+			
+		}
+	
+	//Method that converts number into letter
+		//PRE: One integer parameter
+		//POST: Returns one string value
+		public static String Transition3(int u){
+			String p = null;
+			if ( u==0){
+				p="A";
+			}
+			else if (u==1){
+				p="B";
+			}
+			else if (u==2){
+				p="C";
+			}
+			else if (u==3){
+				p="D";
+			}
+			else if (u==4){
+				p="E";
+			}
+			else if (u==5){
+				p="F";
+			}
+			else if (u==6){
+				p="G";
+			}
+			else if (u==7){
+				p="H";
+			}
+			return p;
+				
+			}
+	//Method that returns value of second value in coordinate
+	//PRE: One string parameter
+	//POST: Returns one integer value.
+	
+	public static int Transition2(String b){
+		String cols;
+		int z = 0;
+		cols = b.substring(1,b.length());
+		z = Integer.parseInt(cols);
+		return z;
+	}
+	
+	//Method that checks the array for boats
+	//PRE: 5 integer paramaters.
+	//POST: A boolean value
+	public static boolean checkArray(int[][]array,int r1, int r, int c1, int c){
+		for (int row =r1; row<r1+r; row++){
+			for (int col = c1; col<c1+c; col++){
+				if (array[row][col] != 0) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
+	
+	//Method that enters the boat in array
+	//PRE: 6 integer paramaters.
+	//POST: N/A.
+	public static void printArray(int[][]array,int r1, int r2, int c1, int c2, int letter){
+		for (int row =r1; row<r2; row++){
+			for (int col = c1; col<c2; col++){
+				array[row][col]= letter;
+			}
+		}
+	}
+	
+	//Method that prints the array and symbols on the side of array.
+	//PRE: One integer parameter.
+	//POST: N/A.
+	public static void outputArray (int [][]array){
+		String letters;
+		letters = "ABCDEFGH";
+		int counter=0, counter2=1;
+		System.out.println("    0  1  2  3  4  5  6  7 ");
+		System.out.println("==========================");
+		for (int rows = 0; rows<8; rows++){
+			System.out.print(letters.substring(counter,counter2) + " | ");
+			counter++;
+			counter2++;
+			for (int col=0;col<8;col++){
+				System.out.print(array [rows][col] + "  ");
+				
+			}
+			System.out.println("");
+		}
+		
+		System.out.println("");
+	}
+
+	
+	}
+	
+	
+	
+
+
